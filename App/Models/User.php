@@ -1,35 +1,41 @@
 <?php
-    namespace App\Models;  
 
-    class User
+    namespace App\Models;
+
+class User
+{
+    private static $table = 'users';
+
+    private static function connPdo()
     {
-        private static $table = 'users';
-        public static function get_user(int $id)
-        {
-            $connPdo = new \PDO(DBDRIVE.': host='.DBHOST.'; dbname='.DBNAME, DBUSER, DBPASS);
-            $sql = 'SELECT * FROM '.self::$table.' WHERE id = :id';
-            $stmt = $connPdo->prepare($sql);
-            $stmt->bindValue(':id', $id);
-            $stmt->execute();
+        $connPdo = new \PDO(DBDRIVE . ': host=' . DBHOST . '; dbname=' . DBNAME, DBUSER, DBPASS);
+        return $connPdo;
+    }
 
-            if($stmt->rowCount() > 0){
-                return $stmt->fetch(\PDO::FETCH_ASSOC);
-            } else{
-                throw new \Exception("Nenhum usuário encontrado.");                
-            }
-        }
+    public static function getUser(int $id)
+    {
+        $sql = 'SELECT * FROM ' . self::$table . ' WHERE id = :id';
+        $stmt = User::connPdo()->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
 
-        public static function get_all_user()
-        {
-            $connPdo = new \PDO(DBDRIVE.': host='.DBHOST.'; dbname='.DBNAME, DBUSER, DBPASS);
-            $sql = 'SELECT * FROM '.self::$table;
-            $stmt = $connPdo->prepare($sql);
-            $stmt->execute();
-
-            if($stmt->rowCount() > 0){
-                return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            } else{
-                throw new \Exception("Nenhum usuário encontrado.");                
-            }
+        if ($stmt->rowCount() > 0) {
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
+        } else {
+            throw new \Exception("Nenhum usuário encontrado.");
         }
     }
+
+    public static function getAllUser()
+    {
+        $sql = 'SELECT * FROM ' . self::$table;
+        $stmt = User::connPdo()->prepare($sql);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } else {
+            throw new \Exception("Nenhum usuário encontrado.");
+        }
+    }
+}
