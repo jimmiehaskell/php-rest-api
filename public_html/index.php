@@ -11,7 +11,7 @@ if ($_GET['url']) {
     if ($url[0] === 'api') {
         array_shift($url);
 
-        $service = 'App\Services\\' . ucfirst($url[0]) . 'Service';
+        $service = 'App\Controllers\\' . ucfirst($url[0]) . 'Controller';
         array_shift($url);
 
         $method = strtolower($_SERVER['REQUEST_METHOD']);

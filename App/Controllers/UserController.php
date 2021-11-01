@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Controllers;
 
 use App\Models\User;
 
-class UserService
+class UserController
 {
     public function get($id = null)
     {
