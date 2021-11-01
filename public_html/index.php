@@ -11,13 +11,14 @@ if ($_GET['url']) {
     if ($url[0] === 'api') {
         array_shift($url);
 
-        $service = 'App\Controllers\\' . ucfirst($url[0]) . 'Controller';
+        $controller = 'App\Controllers\\' . ucfirst($url[0]) . 'Controller';
         array_shift($url);
 
-        $method = strtolower($_SERVER['REQUEST_METHOD']);
+        // $method = strtolower($_SERVER['REQUEST_METHOD']);
+        $method = 'login';
 
         try {
-            $response = call_user_func_array(array(new $service(), $method), $url);
+            $response = call_user_func_array(array(new $controller(), $method), $url);
             http_response_code(200);
             echo json_encode(
                 array('status' => 'sucess', 'dados' => $response),
