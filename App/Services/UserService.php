@@ -17,7 +17,7 @@ class UserService
 
     public function post()
     {
-        return $_POST;
+        return USer::insertNewUser($_POST);
     }
 
     public function update()
