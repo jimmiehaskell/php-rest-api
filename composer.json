@@ -1,6 +1,6 @@
 {
     "name": "jimmiehaskell/php-rest-api",
-    "description": "Estudo do funcionamento de uma API Rest com PHP",
+    "description": "Estudo de caso, API Rest e autenticação JWT com PHP",
     "type": "project",
     "license": "MIT",
     "autoload": {
@@ -14,7 +14,7 @@
     "authors": [
         {
             "name": "Jimmie Haskell",
-            "email": "haskell.estudos@gmail.com"
+            "email": "haskell4228@gmail.com"
         }
     ],
     "require": {
