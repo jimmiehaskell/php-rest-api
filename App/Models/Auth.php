@@ -7,7 +7,7 @@ class Auth
     public static function login($post)
     {
         // Os valores no 'if' devem ser os mesmo passados no arquivos 'client_jwt.html'
-        if ($post['email'] === 'teste@gmail.com' && $post['password'] === '123') {
+        if ($post['email'] === '' && $post['password'] === '') {
             // App key
             $key = '123';
 
