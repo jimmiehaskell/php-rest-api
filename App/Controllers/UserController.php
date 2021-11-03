@@ -17,7 +17,11 @@ class UserController
 
     public function post()
     {
-        return USer::insertNewUser($_POST);
+        if ($_POST != null) {
+            return User::insertNewUser($_POST);
+        } else {
+            throw new \Exception("Todos os campos devem ser preenchidos.");
+        }
     }
 
     public function update()

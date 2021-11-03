@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Controllers\AuthController;
+
 class User
 {
     private static $table = 'user';
@@ -14,29 +16,35 @@ class User
 
     public static function getUser(int $id)
     {
-        $sql = 'SELECT * FROM ' . self::$table . ' WHERE id = :id';
-        $stmt = User::connPdo()->prepare($sql);
-        $stmt->bindValue(':id', $id);
-        $stmt->execute();
+        if (AuthController::isAuthenticated()) {
+            $sql = 'SELECT * FROM ' . self::$table . ' WHERE id = :id';
+            $stmt = User::connPdo()->prepare($sql);
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
-            return $stmt->fetch(\PDO::FETCH_ASSOC);
-        } else {
-            throw new \Exception("Nenhum usuário encontrado.");
+            if ($stmt->rowCount() > 0) {
+                return $stmt->fetch(\PDO::FETCH_ASSOC);
+            } else {
+                throw new \Exception("Nenhum usuário encontrado.");
+            }
         }
+        throw new \Exception("Não autenticado");
     }
 
     public static function getAllUser()
     {
-        $sql = 'SELECT * FROM ' . self::$table;
-        $stmt = User::connPdo()->prepare($sql);
-        $stmt->execute();
+        if (AuthController::isAuthenticated()) {
+            $sql = 'SELECT * FROM ' . self::$table;
+            $stmt = User::connPdo()->prepare($sql);
+            $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        } else {
-            throw new \Exception("Nenhum usuário encontrado.");
+            if ($stmt->rowCount() > 0) {
+                return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            } else {
+                throw new \Exception("Nenhum usuário encontrado.");
+            }
         }
+        throw new \Exception("Não autenticado");
     }
 
     public static function insertNewUser($post)

@@ -14,21 +14,20 @@ if ($_GET['url']) {
         $controller = 'App\Controllers\\' . ucfirst($url[0]) . 'Controller';
         array_shift($url);
 
-        // $method = strtolower($_SERVER['REQUEST_METHOD']);
-        $method = 'login';
+        $method = strtolower($_SERVER['REQUEST_METHOD']);
 
         try {
             $response = call_user_func_array(array(new $controller(), $method), $url);
             http_response_code(200);
             echo json_encode(
-                array('status' => 'sucess', 'dados' => $response),
+                array('status' => 'Sucess', 'dados' => $response),
                 JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK
             );
             exit;
         } catch (\Exception $e) {
             http_response_code(404);
             echo json_encode(
-                array('status' => 'error', 'dados' => $e->getMessage()),
+                array('status' => 'Error', 'dados' => $e->getMessage()),
                 JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK
             );
         }

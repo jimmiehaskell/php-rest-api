@@ -6,44 +6,36 @@
 
 namespace App\Controllers;
 
+use App\Models\Auth;
+
 class AuthController
 {
-    public function login()
+    public function post()
     {
-        var_dump($_POST);
-        if ($_POST['email'] === 'teste@gmail.com' && $_POST['password'] === '123') {
-            // App key
-            $key = '123';
+        return Auth::login($_POST);
+    }
 
-            // Header token
-            $header = [
-                'typ' => 'JWT',
-                'alg' => 'HS256'
-            ];
+    public static function isAuthenticated()
+    {
+        $http_header = apache_request_headers();
+        if (isset($http_header['Authorization']) && $http_header['Authorization'] != null) {
+            $bearer = explode(' ', $http_header['Authorization']);
+            // $bearer[0] = 'bearer';
+            // $bearer[1] = 'token_jwt';
 
-            // Payload - content
-            $payload = [
-                'name' => 'Jimmie Haskell',
-                'email' => 'teste@gmail.com',
-            ];
+            $token = explode('.', $bearer[1]);
+            $header = $token[0];
+            $payload = $token[1];
+            $sign = $token[2];
 
-            // JSON
-            $header = json_encode($header);
-            $payload = json_encode($payload);
+         // Confirm sign
+            $valid = hash_hmac('sha256', $header . "." . $payload, '123', true);
+            $valid = base64_encode($valid);
 
-            // BASE 64
-            $header = base64_encode($header);
-            $payload = base64_encode($payload);
-
-            // Sign
-            $sign = hash_hmac('sha256', $header . "." . $payload, $key, true);
-            $sign = base64_encode($sign);
-
-            // Token
-            $token = $header . "." . $payload . "." . $sign;
-
-            return $token;
+            if ($sign === $valid) {
+                return true;
+            }
         }
-        throw new \Exception("Não autenticado");
+        return false;
     }
 }
